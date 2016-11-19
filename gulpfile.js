@@ -1,14 +1,18 @@
 var gulp = require("gulp"),
     less = require("gulp-less"),
     minify = require("gulp-clean-css"),
-    //uglify = require("gulp-uglify"),
+    uglify = require("gulp-uglify"),
     sourcemaps = require("gulp-sourcemaps"),
-    //concat = require("gulp-concat"),
+    concat = require("gulp-concat"),
     watch = require("gulp-watch"),
     plumber = require("gulp-plumber"),
     gutil = require("gulp-util")
 ;
 
+var appJSBundle = 
+[
+    "./node_modules/jquery/dist/jquery.js"
+]
 
 var gulp_src = gulp.src;
 gulp.src = function () {
@@ -30,6 +34,15 @@ gulp.task("less", function () {
 
 gulp.task("watchLESS", function () {
     gulp.watch(["Content/less/*.less", "Content/less/**/*.less"], ["less"]);
+});
+
+gulp.task("appjs", function() {
+    return gulp.src(appJSBundle)
+    .pipe(sourcemaps.init())
+    .pipe(concat('app.js'))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('./maps'))
+    .pipe(gulp.dest('./js'));    
 });
 
 
